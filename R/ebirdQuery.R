@@ -28,7 +28,6 @@
 #'
 #' @export
 #'
-#' @importFrom ROracle dbGetQuery
 #' @importFrom data.table fwrite
 #'
 #' @references Team eBird.
@@ -59,7 +58,7 @@ ebirdQuery <- function(connection, type, query.list, write.wd)
 		{
 			#use the queryPaster function to create an SQL query for all eBird taxa
 			#contained within that (Jetz) species concept
-			temp <- dbGetQuery(conn=connection, statement=spQueryPaster(query.list[[i]]))
+			temp <- RORacle::dbGetQuery(conn=connection, statement=spQueryPaster(query.list[[i]]))
 		
 			#remove duplicate records for instances where you called both a specific
 			#subspecies and its parent. you screwed up and ran it wrong originally. that
@@ -80,7 +79,7 @@ ebirdQuery <- function(connection, type, query.list, write.wd)
 		#for(i in 1:length(query.list))
 		{
 			#use the queryPaster function to create an SQL query for that location
-			temp <- dbGetQuery(conn=connection, statement=absQueryPaster(query.list[i]))
+			temp <- RORacle::dbGetQuery(conn=connection, statement=absQueryPaster(query.list[i]))
 		
 			#save out as csv file. first create the file name
 			saveName <- paste(names(query.list)[i], "_poss_locs", ".csv", sep="")
@@ -94,7 +93,7 @@ ebirdQuery <- function(connection, type, query.list, write.wd)
 		#for(i in 1:length(query.list))
 		{
 			#use the queryPaster function to create an SQL query for that location
-			temp <- dbGetQuery(conn=connection, statement=allQueryPaster(query.list[i]))
+			temp <- RORacle::dbGetQuery(conn=connection, statement=allQueryPaster(query.list[i]))
 		
 			#save out as csv file. first create the file name
 			saveName <- paste(query.list[i], "_allRecords", ".csv", sep="")
