@@ -11,7 +11,7 @@ yada yada
 
 ```
 library(devtools)
-install_github("ebirdr/eliotmiller")
+install_github("eliotmiller/ebirdr", auth_token="yourtokenhere")
 library(ebirdr)
 
 #now some examples
