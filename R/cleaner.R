@@ -7,8 +7,12 @@
 #' @param keep Character vector of column names in the existing eBird records that you
 #' would like to be passed along/kept in the cleaned files.
 #' @param group.id The name of the group ID column in the existing eBird records. Usually
-#' simply 'GROUP.ID'. This is required if you would like to remove all but one duplicated
-#' group checklist.
+#' (always?) simply 'GROUP.ID'. Required if you would like to remove all but one duplicated
+#' group checklist. Note that it should be possible to remove the unique.filter argument
+#' and, if group.id is missing, simply assume unique.filter is FALSE. However, because
+#' the cleaning function operates through a foreach loop, need to do some fancy coding to
+#' ensure the group.id argument properly gets "exported into the parallel foreach
+#' environment". This solution seems to work.
 #' @param unique.filter Whether or not to invoke the uniqueFilter function. Default is
 #' TRUE, meaning that all but one checklist from shared group checklists will be removed.
 #' Setting to FALSE means that all (duplicated) group checklists will be kept.
@@ -72,7 +76,7 @@
 #' #load the cleaned file in
 #' ex2 <- read.csv("ex_cleaned.csv")
 #'
-#' #many of the records were culled. data.frame went from 80 rows to 14, and we
+#' #many of the records were culled. data.frame went from 80 rows to 52, and we
 #' #only kept 21 of 28 columns.
 #' dim(ex2)
 #'
