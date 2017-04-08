@@ -20,20 +20,33 @@
 #' @references Team eBird.
 #'
 #' @examples
-#' #not run
-#' #results <- readIn()
-#' #summ <- sesIndiv(results)
-#' #examp <- nullPerformance(summ)
+#' #load the example data file and delete group checklist duplicate entries
+#' data(ex)
+#' dim(ex)
+#' ex2 <- uniqueFilter(ex, "GROUP_ID")
+#' dim(ex2)
+#' ex3 <- uniqueFilter(ex, "GROUP_ID", "SUB_ID")
+#' dim(ex3)
+#' setdiff(ex2$SUB_ID, ex3$SUB_ID)
 
 uniqueFilter <- function(dat, group.id, sub.id)
 {
-	#assign a unique group.id to every row that is missing a group identifier
+	#convert group.id and, if provided, sub.id to character vectors
+	dat[,group.id] <- as.character(dat[,group.id])
+
+	if(!missing(sub.id))
+	{
+		dat[,sub.id] <- as.character(dat[,sub.id])
+	}
+
+	#assign a unique group.id to every row that is missing a group identifier. first figure out
+	#how many checklists do not have a group ID
 	toGenerate <- length(dat[,group.id][dat[,group.id]==""])
 
 	#previously you ran this like below hashed out, but got errors recently. here for
 	#legacy sake	
-	#dat[,group.id][dat[,group.id]==""] <- paste("delete", 1:toGenerate, sep="")
-	dat[,group.id][is.na(dat[,group.id])] <- paste("delete", 1:toGenerate, sep="")
+	dat[,group.id][dat[,group.id]==""] <- paste("delete", 1:toGenerate, sep="")
+	#dat[,group.id][is.na(dat[,group.id])] <- paste("delete", 1:toGenerate, sep="")
 
 	#now if sub.id is provided, sort according to that	
 	if(!missing(sub.id))

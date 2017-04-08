@@ -28,10 +28,14 @@ are saved into the active R session, as opposed to written to file like the
 cleaner() function.
 }
 \examples{
-#not run
-#results <- readIn()
-#summ <- sesIndiv(results)
-#examp <- nullPerformance(summ)
+#load the example data file and delete group checklist duplicate entries
+data(ex)
+dim(ex)
+ex2 <- uniqueFilter(ex, "GROUP_ID")
+dim(ex2)
+ex3 <- uniqueFilter(ex, "GROUP_ID", "SUB_ID")
+dim(ex3)
+setdiff(ex2$SUB_ID, ex3$SUB_ID)
 }
 \references{
 Team eBird.
