@@ -83,7 +83,7 @@ spThinner <- function(xxx, yyy, lat.col, long.col, xlim = c(NA,NA),
     #subset to the spatially thinned records
     accept <- sgc$sample.index[,1]
     accept <- accept[!is.na(accept)]
-    toWrie <- temp[accept,]
+    toWrite <- temp[accept,]
 
     #save out to the write.wd.
     fwrite(toWrite, file=paste(write.wd, outFiles[i], sep="/"), row.names=FALSE)
