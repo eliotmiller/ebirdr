@@ -89,7 +89,7 @@ spThinner <- function(xxx, yyy, lat.col, long.col, xlim = c(NA,NA),
     fwrite(toWrite, file=paste(write.wd, outFiles[i], sep="/"), row.names=FALSE)
 
     #create a little object that shows before and after dimensions
-    matrix(nrow=2, ncol=1, dim(temp)[1], dim(toWrite)[1], byrow=TRUE)
+    matrix(c(dim(temp)[1], dim(toWrite)[1]), nrow=1, ncol=2, byrow=TRUE)
   }
 
   rownames(output) <- sub(".csv", "", allFiles)
