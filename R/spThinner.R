@@ -93,6 +93,6 @@ spThinner <- function(xxx, yyy, lat.col, long.col, xlim = c(NA,NA),
   }
 
   rownames(output) <- sub(".csv", "", allFiles)
-  rownames(output) <- colnames(c("before","after"))
+  colnames(output) <- c("before","after")
   output
 }
