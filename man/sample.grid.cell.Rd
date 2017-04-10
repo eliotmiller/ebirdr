@@ -41,7 +41,9 @@ function cannot take a sample larger than the population (in a cell) when
 'replace = FALSE' If 'replace = FALSE' and the size parameter is larger than the 
 cell populatuion size this function passes back a vector of length size, 
 but it will contain only as many unique points in the cell
-and the rest of the entries will be NA's.
+and the rest of the entries will be NA's. Note that the arguments in this
+function are currently named things that already mean something in base R. We
+may want to change that.
 }
 \examples{
 #Generate Random Points over 2D field 
@@ -87,6 +89,6 @@ sort(unique(sgc$sample.index))
 sort(unique(c(1:length(xxx))[!is.na(sgc$cell.number)]))
 }
 \references{
-Team eBird. Daniel Fink?
+Team eBird. Daniel Fink.
 }
 

@@ -3,6 +3,7 @@
 export(cleaner)
 export(ebirdQuery)
 export(sample.grid.cell)
+export(spThinner)
 export(uniqueFilter)
 importFrom(data.table,fread)
 importFrom(data.table,fwrite)

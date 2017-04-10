@@ -20,7 +20,9 @@
 #' 'replace = FALSE' If 'replace = FALSE' and the size parameter is larger than the 
 #' cell populatuion size this function passes back a vector of length size, 
 #' but it will contain only as many unique points in the cell
-#' and the rest of the entries will be NA's.   
+#' and the rest of the entries will be NA's. Note that the arguments in this
+#' function are currently named things that already mean something in base R. We
+#' may want to change that.
 #'
 #' @return Index vector of selected locations.
 #'
@@ -28,7 +30,7 @@
 #'
 #' @importFrom plyr rbind.fill.matrix
 #'
-#' @references Team eBird. Daniel Fink?
+#' @references Team eBird. Daniel Fink.
 #'
 #' @examples
 #' #Generate Random Points over 2D field 
