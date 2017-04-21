@@ -4,17 +4,21 @@
 \alias{bigPCA}
 \title{Run a PCA over a set of eBird records}
 \usage{
-bigPCA(comparisons, read.wd, write.wd, columns, scale.center = FALSE, axes)
+bigPCA(comparisons, read.wd, write.wd, aux.wd, columns, scale.center = FALSE,
+  SVD = FALSE, axes)
 }
 \arguments{
-\item{comparisons}{List where each element is a named character vector. The name of
-the element specifies what the PCA results will be called, and the character vector
-lists the species that will be combined before the PCA is run.}
+\item{comparisons}{List of character vectors. Each character vector lists the
+species that will be combined before the PCA is run. The name of the character
+vector (i.e. the name of the elements of the list), are used to save out summaries
+of the PCA, e.g. percent variance explained by each axis.}
 
 \item{read.wd}{Working directory where the eBird records with environmental data are
 stored.}
 
 \item{write.wd}{Working directory where PCA results will be saved.}
+
+\item{aux.wd}{Working directory where the summarized PCA results will be saved.}
 
 \item{columns}{Character vector of column names in the existing eBird records that
 you will run the PCA over.}
@@ -26,21 +30,30 @@ files. That part is untested, and it may be quicker to run it over a big.matrix-
 currently this just runs over a regular matrix before converting afterwards to
 a big matrix.}
 
+\item{SVD}{Default is FALSE. The big.PCA function supposedly runs much faster if
+SVD is set to TRUE, but the results are not exactly the same as regular prcomp if
+it is set to TRUE. Specifically, the standard deviation of each axis is the same
+with SVD set to TRUE, which means(?) that each axis is equally important, which
+potentially seems odd to me for later hypervolume calculations.}
+
 \item{axes}{How many axes from the PCA to retain and return.}
 }
 \value{
-Nothing to the workspace. Saves PCA results to write.wd.
+Nothing to the workspace. Saves PCA results to write.wd, and PCA summaries
+to aux.wd.
 }
 \description{
 Combine a set of large eBird files and run a PCA over a specified set of columns.
 }
 \details{
-It can be nearly impossible to run a standard base PCA over the
+Depending on the size of the files, it can be nearly impossible to run a
+standard base PCA over the
 environmental variables in a set of eBird files. This function uses functions from
 the data.table, bigmemory and bigpca packages to run a PCA. For small files it is
 slower than a base R PCA, but it theoretically can handle very large inputs that
-would normally crash R. I have a version of this file that runs in parallel, but not sure we need
-it, and may swamp the RAM. Assess whether worth including parallel option at some
+would normally crash R. I have a version of this file that runs in parallel, but
+not sure we need it, and may swamp the RAM. Assess whether worth including parallel
+option at some
 point. There is a major assumption built into the 'comparisons' list above, which
 is that the files in read.wd begin with the species' names, with underscores
 between the genus and species.

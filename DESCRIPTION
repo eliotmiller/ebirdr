@@ -17,6 +17,8 @@ Imports:
     plyr,
     raster,
     bigpca,
-    bigmemory
+    bigmemory,
+    hypervolume,
+    methods
 License: GPL-3
 RoxygenNote: 5.0.1

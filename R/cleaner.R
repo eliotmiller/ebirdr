@@ -51,6 +51,8 @@
 #' @importFrom data.table fwrite fread
 #' @importFrom foreach foreach %dopar%
 #' @importFrom doParallel registerDoParallel
+#' @importFrom methods new
+#' @importFrom utils write.csv
 #'
 #' @references Team eBird.
 #'

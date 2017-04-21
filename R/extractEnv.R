@@ -12,7 +12,7 @@
 #' @param write.wd Working directory where the eBird records + environmental data will
 #' be saved to.
 #' @param keep Character vector of column names in the existing eBird records that you
-#' would like to be passed along/kept in the cleaned files. Call be set to 'keep.all',
+#' would like to be passed along/kept in the cleaned files. Can be set to 'keep.all',
 #' in which case all columns in the eBird data files will be kept.
 #' @param longitude The name of the column in the eBird data files where the longitude
 #' data is kept.

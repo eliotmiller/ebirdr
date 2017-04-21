@@ -2,12 +2,14 @@
 #'
 #' Combine a set of large eBird files and run a PCA over a specified set of columns.
 #'
-#' @param comparisons List where each element is a named character vector. The name of
-#' the element specifies what the PCA results will be called, and the character vector
-#' lists the species that will be combined before the PCA is run.
+#' @param comparisons List of character vectors. Each character vector lists the
+#' species that will be combined before the PCA is run. The name of the character
+#' vector (i.e. the name of the elements of the list), are used to save out summaries
+#' of the PCA, e.g. percent variance explained by each axis.
 #' @param read.wd Working directory where the eBird records with environmental data are
 #' stored.
 #' @param write.wd Working directory where PCA results will be saved.
+#' @param aux.wd Working directory where the summarized PCA results will be saved.
 #' @param columns Character vector of column names in the existing eBird records that
 #' you will run the PCA over.
 #' @param scale.center Default is FALSE, i.e. a covariance matrix PCA will be run. To
@@ -16,19 +18,27 @@
 #' files. That part is untested, and it may be quicker to run it over a big.matrix--
 #' currently this just runs over a regular matrix before converting afterwards to
 #' a big matrix.
+#' @param SVD Default is FALSE. The big.PCA function supposedly runs much faster if
+#' SVD is set to TRUE, but the results are not exactly the same as regular prcomp if
+#' it is set to TRUE. Specifically, the standard deviation of each axis is the same
+#' with SVD set to TRUE, which means(?) that each axis is equally important, which
+#' potentially seems odd to me for later hypervolume calculations.
 #' @param axes How many axes from the PCA to retain and return.
 #'
-#' @details It can be nearly impossible to run a standard base PCA over the
+#' @details Depending on the size of the files, it can be nearly impossible to run a
+#' standard base PCA over the
 #' environmental variables in a set of eBird files. This function uses functions from
 #' the data.table, bigmemory and bigpca packages to run a PCA. For small files it is
 #' slower than a base R PCA, but it theoretically can handle very large inputs that
-#' would normally crash R. I have a version of this file that runs in parallel, but not sure we need
-#' it, and may swamp the RAM. Assess whether worth including parallel option at some
+#' would normally crash R. I have a version of this file that runs in parallel, but
+#' not sure we need it, and may swamp the RAM. Assess whether worth including parallel
+#' option at some
 #' point. There is a major assumption built into the 'comparisons' list above, which
 #' is that the files in read.wd begin with the species' names, with underscores
 #' between the genus and species.
 #'
-#' @return Nothing to the workspace. Saves PCA results to write.wd.
+#' @return Nothing to the workspace. Saves PCA results to write.wd, and PCA summaries
+#' to aux.wd.
 #'
 #' @export
 #'
@@ -37,7 +47,8 @@
 #' @importFrom bigmemory as.big.matrix
 #' @importFrom bigpca big.PCA
 
-bigPCA <- function(comparisons, read.wd, write.wd, columns, scale.center=FALSE, axes)
+bigPCA <- function(comparisons, read.wd, write.wd, aux.wd, columns,
+	scale.center=FALSE, SVD=FALSE, axes)
 {
 	#list all the files in read.wd
 	allFiles <- list.files(path=read.wd)
@@ -97,14 +108,30 @@ bigPCA <- function(comparisons, read.wd, write.wd, columns, scale.center=FALSE, 
 		#run the big pca function over it. this takes over ten times as long in some
 		#situations, but it should not be memory limited
 		tempPCA <- bigpca::big.PCA(bigMatrix, pcs.to.keep=axes, center=FALSE,
-			return.loadings=TRUE)
+			return.loadings=TRUE, SVD=SVD)
 		
 		#combine with the species names
 		pca <- data.table::data.table(species=bound$species, tempPCA$PCs)
+
+		#split the data.table on species' names and save out each separately
+		splitUp <- split(pca, factor(pca$species))
 		
-		#save to file under name of comparison i
-		outName <- paste(names(comparisons)[i], "_pca.csv", sep="")
-		data.table::fwrite(pca, file=paste(write.wd, outName, sep="/"),
-			row.names=FALSE)
+		#save each to file. could parallelize this (splitUp is a list so could
+		#mclapply or whatever too)
+		for(j in 1:length(toLoad))
+		{
+			outName <- paste(sppToLoad[j], "_pca.csv", sep="")
+			data.table::fwrite(splitUp[[j]], file=paste(write.wd, outName, sep="/"),
+				row.names=FALSE)
+		}
+
+		#summarize the PCA results and save those out. first calculate SD per axis,
+		#then square that for variance. build up into a dataframe and save out
+		tempSD <- (apply(tempPCA$PCs, 2, sd))^2
+		PCAresults <- rbind(SD = sqrt(tempSD),
+			Proportion = tempSD/sum(tempSD),
+			Cumulative = cumsum(tempSD)/sum(tempSD))
+		outName <- paste(names(comparisons)[i], "_pca_summary.csv", sep="")
+		write.csv(PCAresults, file=paste(aux.wd, outName, sep="/"))
 	}
 }
