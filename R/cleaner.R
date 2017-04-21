@@ -31,9 +31,6 @@
 #' processing software.
 #' @param ... Additional arguments to be passed to lower level functions. For instance,
 #' could be used to pass sub.id information to uniqueFilter().
-#' results. Alternatively (and perhaps preferably), either "plot" or "richness" can be
-#' provided and, assuming that concatenation option was specified in the multiLinker runs,
-#' performance results will be summarized just over that specified option.
 #' 
 #' @details This function should be fairly flexible. Pass it a set of arguments, and only
 #' records that meet those requirements will be kept. Tell it which columns you want to

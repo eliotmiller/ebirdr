@@ -43,10 +43,7 @@ various parallel processing packages. A forthcoming feature will allow you to sp
 processing software.}
 
 \item{...}{Additional arguments to be passed to lower level functions. For instance,
-could be used to pass sub.id information to uniqueFilter().
-results. Alternatively (and perhaps preferably), either "plot" or "richness" can be
-provided and, assuming that concatenation option was specified in the multiLinker runs,
-performance results will be summarized just over that specified option.}
+could be used to pass sub.id information to uniqueFilter().}
 }
 \value{
 A list of character vectors of unique SUBNATIONAL1_CODEs that each species
