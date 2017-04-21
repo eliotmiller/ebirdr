@@ -71,20 +71,22 @@ get saved into the active R session.
 data(ex)
 dim(ex)
 
-#create an empty directory and save the ex object into it as "ex.csv", e.g.
-write.csv(ex, "ex.csv", row.names=FALSE)
+#create an empty directory and save the ex object into it as "ex.csv"
+dir.create("delete")
+write.csv(ex, paste(getwd(), "delete", "ex.csv", sep="/"), row.names=FALSE)
 #then change your working directory to be this new directory, and run
-system.time(tempLocs <- cleaner(
+tempLocs <- cleaner(
    arguments=c("VALID == '1'", "PROTOCOL_NAME != 'Historical'"),
   keep=c("LOC_ID", "SUBNATIONAL1_CODE", "LATITUDE", "LONGITUDE", "SUB_ID",
 	"CREATION_DT", "PROTOCOL_NAME", "DURATION_HRS", "ALL_OBS_REPORTED",
 	"OBS_DT", "EFFORT_HRS_ATLEAST", "EFFORT_HRS_ATMOST", "EFFORT_DISTANCE_KM",
 	"EFFORT_DISTANCE_KM_ATLEAST", "EFFORT_DISTANCE_KM_ATMOST", "NUM_OBSERVERS",
 	"SCI_NAME", "HOW_MANY_ATLEAST", "HOW_MANY_ATMOST", "REVIEWED", "VALID"),
-  group.id="GROUP_ID", read.wd=getwd(), write.wd=getwd(), cores=1))
+  group.id="GROUP_ID", read.wd=paste(getwd(), "delete", sep="/"),
+   write.wd=paste(getwd(), "delete", sep="/"), cores=1)
 
 #load the cleaned file in
-ex2 <- read.csv("ex_cleaned.csv")
+ex2 <- read.csv(paste(getwd(), "delete", "ex_cleaned.csv", sep="/"))
 
 #many of the records were culled. data.frame went from 80 rows to 52, and we
 #only kept 21 of 28 columns.

@@ -5,7 +5,7 @@
 \title{Function to spatially sample points}
 \usage{
 sample.grid.cell(xxx, yyy, xlim = c(NA, NA), ylim = c(NA, NA), nx, ny,
-  jitter = F, size, replace = F)
+  jitter = FALSE, size, replace = FALSE)
 }
 \arguments{
 \item{xxx}{Vector of longitude or E-W coordinates.}
@@ -64,9 +64,9 @@ sgc <- sample.grid.cell(
  ylim = c(3,6),
  nx = 5, 
  ny = 2, 
- jitter = T, 
+ jitter = TRUE, 
  size = 1, 
- replace = F ) 
+ replace = FALSE ) 
 length(sgc$sample.index)
 sum(!is.na(sgc$sample.index))
 points(

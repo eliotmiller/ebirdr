@@ -1,5 +1,5 @@
 Package: ebirdr
-Title: Query and manipulate eBird data.
+Title: Query and manipulate eBird data
 Description: In-house R package to manipulate and maybe query eBird data.
 Version: 0.0.1
 Date: 2017-4-07
@@ -12,5 +12,11 @@ Depends:
 Imports:
     foreach,
     doParallel,
-    data.table
+    data.table,
+    dplyr,
+    plyr,
+    raster,
+    bigpca,
+    bigmemory
+License: GPL-3
 RoxygenNote: 5.0.1

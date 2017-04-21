@@ -51,9 +51,9 @@
 #'  ylim = c(3,6),
 #'  nx = 5, 
 #'  ny = 2, 
-#'  jitter = T, 
+#'  jitter = TRUE, 
 #'  size = 1, 
-#'  replace = F ) 
+#'  replace = FALSE ) 
 #' length(sgc$sample.index)
 #' sum(!is.na(sgc$sample.index))
 #' points(
@@ -82,9 +82,9 @@ sample.grid.cell <- function(
   ylim = c(NA,NA),
   nx, 
   ny, 
-  jitter = F,
+  jitter = FALSE,
   size, 
-  replace = F ){	
+  replace = FALSE ){	
 
   # Stratified sample over Grid Cell Number
   sample_fun <- function(x, size, replace){
@@ -92,23 +92,23 @@ sample.grid.cell <- function(
     # Cells with a single sample cause problems, see help(sample)
     # So, I am going to handle this situation "by hand"
     result <- rep(NA, size)
-    if (length(x)==1 & replace==F) {
-      #cat("sf: length(x)==1 & replace==F",x,"\n")
+    if (length(x)==1 & replace==FALSE) {
+      #cat("sf: length(x)==1 & replace==FALSE",x,"\n")
       result <- rep(NA, size)
       result[1] <- x 
     }
-    if (length(x)==1 & replace==T) {
-      #cat("sf: length(x)==1 & replace==T",x,"\n")
+    if (length(x)==1 & replace==TRUE) {
+      #cat("sf: length(x)==1 & replace==TRUE",x,"\n")
       result <- rep(x, size)
     }
-    if (length(x)>1 & replace == F & size > length(x) ){
+    if (length(x)>1 & replace == FALSE & size > length(x) ){
       result <- rep(NA, size)
       result[1:length(x)] <- x 
     }
-    if (length(x)>1 & replace == F & size <= length(x) ){
+    if (length(x)>1 & replace == FALSE & size <= length(x) ){
       result <- sample(x=x, size=size, replace=replace)	
     }		
-    if (length(x)>1 & replace == T ){
+    if (length(x)>1 & replace == TRUE ){
       result <- sample(x=x, size=size, replace=replace)	
     }
     return(result) 

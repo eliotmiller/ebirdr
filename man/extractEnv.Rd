@@ -4,7 +4,8 @@
 \alias{extractEnv}
 \title{Extract environmental data}
 \usage{
-extractEnv(env.wd, ebird.wd, write.wd, keep, longitude, latitude, cores)
+extractEnv(env.wd, ebird.wd, write.wd, keep, longitude, latitude,
+  cut.incomplete = TRUE, cores)
 }
 \arguments{
 \item{env.wd}{Working directory where the environmental data is currently stored.
@@ -28,6 +29,9 @@ data is kept.}
 
 \item{latitude}{The name of the column in the eBird data files where the latitude
 data is kept.}
+
+\item{cut.incomplete}{Default is TRUE. If a point is missing environmental data,
+will remove that point before saving out the file.}
 
 \item{cores}{The number of cores to use for parallel processing. This package currently
 requires your computer to be able to handle at, the bare minimum, installation of the

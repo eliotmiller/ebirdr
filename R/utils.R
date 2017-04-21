@@ -3,8 +3,9 @@
 #strWrap and/or toString below would allow you to not have the super run-on lines. need to
 #figure out how to implement them.
 
-#this query will pull all the locs, with effort information from a given
-#SUBNATIONAL1 location.
+#this really random line of code makes R not throw a warning with respect to the non-
+#standard foreach loops in some of the functions
+globalVariables("i")
 
 absQueryPaster <- function(loc.code)
 {

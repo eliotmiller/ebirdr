@@ -18,6 +18,8 @@
 #' data is kept.
 #' @param latitude The name of the column in the eBird data files where the latitude
 #' data is kept.
+#' @param cut.incomplete Default is TRUE. If a point is missing environmental data,
+#' will remove that point before saving out the file.
 #' @param cores The number of cores to use for parallel processing. This package currently
 #' requires your computer to be able to handle at, the bare minimum, installation of the
 #' various parallel processing packages. A forthcoming feature will allow you to specify
@@ -36,9 +38,10 @@
 #' @export
 #'
 #' @importFrom raster getData extract
+#' @importFrom stats complete.cases runif sd
 
 extractEnv <- function(env.wd, ebird.wd, write.wd, keep, longitude,
-	latitude, cores)
+	latitude, cut.incomplete=TRUE, cores)
 {
 	registerDoParallel(cores)
 	
@@ -72,6 +75,15 @@ extractEnv <- function(env.wd, ebird.wd, write.wd, keep, longitude,
 		#bind the records to the climate data
 		toSave <- data.frame(records, env)
 		
+		#if complete cases is TRUE, cut any cases where the env data is incomplete
+		if(cut.incomplete)
+		{
+			#identify the columns that contain the env data in toSave
+			lastCol <- dim(toSave)[2]
+			firstCol <- lastCol - dim(env)[2] + 1
+			toSave <- toSave[complete.cases(toSave[,firstCol:lastCol]),]
+		}
+
 		#save out csv
 		outName <- sub(".csv", "_withenv.csv", allFiles[i])
 		fwrite(toSave, file=paste(write.wd, outName, sep="/"), row.names=FALSE)

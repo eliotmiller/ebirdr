@@ -41,7 +41,7 @@
 #' @references Team eBird.
 
 spThinner <- function(xxx, yyy, lat.col, long.col, xlim = c(NA,NA),
-	ylim = c(NA,NA), nx, ny, jitter = F, size, replace = F, read.wd,
+	ylim = c(NA,NA), nx, ny, jitter = FALSE, size, replace = FALSE, read.wd,
 	write.wd, cores)
 {
   registerDoParallel(cores)

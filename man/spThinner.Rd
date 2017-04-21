@@ -5,7 +5,7 @@
 \title{Spatially thin a set of eBird records}
 \usage{
 spThinner(xxx, yyy, lat.col, long.col, xlim = c(NA, NA), ylim = c(NA, NA),
-  nx, ny, jitter = F, size, replace = F, read.wd, write.wd, cores)
+  nx, ny, jitter = FALSE, size, replace = FALSE, read.wd, write.wd, cores)
 }
 \arguments{
 \item{xxx}{Either E-W coordinates, or the word "extent". If extent is desired,

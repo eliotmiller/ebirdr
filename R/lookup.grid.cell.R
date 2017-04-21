@@ -40,7 +40,7 @@
 #     ylim = c(4,6),
 #     nx = 2, 
 #     ny = 2, 
-#     jitter = T )
+#     jitter = TRUE )
 #   points(
 #     xxx[!is.na(lgc$cell.number)], 
 #     yyy[!is.na(lgc$cell.number)], 
@@ -62,7 +62,7 @@
 #       ylim = c(0,10),
 #       nx = 100, 
 #       ny = 100, 
-#       jitter = T )  )
+#       jitter = TRUE )  )
 #
 # -----------------------------------------------------------------------------
 
@@ -73,12 +73,11 @@ lookup.grid.cell <- function(
   ylim = c(NA,NA),
   nx = 64, 
   ny = 64, 
-  jitter = F ){
+  jitter = FALSE ){
   # -----------------------------------
-  require(plyr)
   cell.number <- rep(NA, length(xxx))
-  if (any(is.na(xlim))) xlim <- range(xxx, na.rm=T)
-  if (any(is.na(ylim))) ylim <- range(yyy, na.rm=T)
+  if (any(is.na(xlim))) xlim <- range(xxx, na.rm=TRUE)
+  if (any(is.na(ylim))) ylim <- range(yyy, na.rm=TRUE)
   xxx.width <- abs(xlim[2]-xlim[1])/nx
   yyy.width <- abs(ylim[2]-ylim[1])/ny
   # Lower Left Corner
@@ -117,7 +116,7 @@ lookup.grid.cell <- function(
     # jittered bounding box 
     bb = matrix( 
       c(x.ll, y.ll, x.ll + nx*xxx.width, y.ll + ny*yyy.width), 2, 2, 
-      byrow=T, dimnames=list(c("ll", "ur"), c("xxx", "yyy"))), 
+      byrow=TRUE, dimnames=list(c("ll", "ur"), c("xxx", "yyy"))), 
     nx = nx, 
     ny = ny, 
     xwidth = xxx.width, 
