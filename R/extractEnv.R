@@ -28,8 +28,8 @@
 #'
 #' @details There is a lot of room to make this function more flexible. Currently it
 #' assumes you have bioclim data in a folder already on your computer at a resolution of
-#' 2.5. There is no reason the function cannot be generalized to download bioclim data
-#' at whatever resolution you prefer, and there is no reason it cannot be generalized
+#' 2.5 minutes. There is no reason the function cannot be generalized to download bioclim
+#' data at whatever resolution you prefer, and there is no reason it cannot be generalized
 #' to extract data from other GIS layers.
 #'
 #' @return Saves data files with associated environmental data to the write.wd, returns
