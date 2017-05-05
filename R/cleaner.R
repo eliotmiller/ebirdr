@@ -39,9 +39,9 @@
 #' where each element in the list refers to a file in the write.wd, and the elements within
 #' the character vector summarize the unique SUBNATIONAL1_CODEs that are found in each
 #' cleaned file. Useful for generating absences, e.g. by querying on the resulting list
-#' with the ebirdQuery type set to 'absences'. Room for improvement in terms of the output
-#' of this function, e.g. would be nice to make it so you can specifiy what you want to
-#' get saved into the active R session.
+#' with the ebirdSQL::ebirdQuery type set to 'absences'. Room for improvement in terms of
+#' the output of this function, e.g. would be nice to make it so you can specifiy what you
+#' want to get saved into the active R session.
 #'
 #' @return A list of character vectors of unique SUBNATIONAL1_CODEs that each species
 #' occurs in.

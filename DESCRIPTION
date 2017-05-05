@@ -1,6 +1,6 @@
 Package: ebirdr
-Title: Query and manipulate eBird data
-Description: In-house R package to manipulate and maybe query eBird data.
+Title: Manipulate eBird data
+Description: In-house R package to manipulate eBird data.
 Version: 0.0.1
 Date: 2017-4-07
 Author: eBird staff
