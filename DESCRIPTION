@@ -19,6 +19,8 @@ Imports:
     bigpca,
     bigmemory,
     hypervolume,
-    methods
+    methods,
+    rgdal,
+    sp
 License: GPL-3
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

@@ -40,4 +40,3 @@ setdiff(ex2$SUB_ID, ex3$SUB_ID)
 \references{
 Team eBird.
 }
-

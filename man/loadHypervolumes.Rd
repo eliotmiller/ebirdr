@@ -25,4 +25,3 @@ The hypervolume package comes with a number of functions that can be used
 over hypervolume list objects. The default plotting option, for instance, can be
 rather useful.
 }
-

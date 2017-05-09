@@ -58,4 +58,3 @@ point. There is a major assumption built into the 'comparisons' list above, whic
 is that the files in read.wd begin with the species' names, with underscores
 between the genus and species.
 }
-

@@ -91,4 +91,3 @@ sort(unique(c(1:length(xxx))[!is.na(sgc$cell.number)]))
 \references{
 Team eBird. Daniel Fink.
 }
-

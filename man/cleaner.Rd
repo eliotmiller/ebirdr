@@ -96,4 +96,3 @@ tempLocs
 \references{
 Team eBird.
 }
-

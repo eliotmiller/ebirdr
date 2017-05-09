@@ -61,4 +61,3 @@ order to ensure what works for your data.
 \references{
 Team eBird.
 }
-

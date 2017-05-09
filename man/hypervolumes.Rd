@@ -49,4 +49,3 @@ me in practice.
 Blonder, B., C. Lamanna, C. Violle, and B. J. Enquist. 2014.
 The n-dimensional hypervolume. Global Ecology and Biogeography 23:595-609.
 }
-
