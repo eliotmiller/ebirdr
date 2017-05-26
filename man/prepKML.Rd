@@ -4,8 +4,8 @@
 \alias{prepKML}
 \title{Convert eBird records to KML}
 \usage{
-prepKML(include, date.col, coords, early.date, late.date, handle.early,
-  handle.late, schema, read.wd, write.wd, cores)
+prepKML(include, sql.date = FALSE, date.col, coords, early.date, late.date,
+  handle.early, handle.late, schema, read.wd, write.wd, cores)
 }
 \arguments{
 \item{include}{Character vector of the columns to include in the prepped KML file.
@@ -13,6 +13,10 @@ Ideally, these should include a single column or combination of columns that
 can be used as a unique identifier to match KML records back to csv records later.
 Also, this function is currently programmed in a rather inflexible manner, and one
 of the columns needs to be a date, to be specified exactly with the date.col arg.}
+
+\item{sql.date}{Default is FALSE. Set to TRUE if the date is the complex character
+string that comes directly out of eBIRD SQL database, and will force into suitable
+format. Otherwise takes date as is.}
 
 \item{date.col}{The name of the date column to use for querying downstream. Likely
 that some uses of KML files wouldn't need a date column. We should revise this

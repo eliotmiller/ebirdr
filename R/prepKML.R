@@ -7,6 +7,9 @@
 #' can be used as a unique identifier to match KML records back to csv records later.
 #' Also, this function is currently programmed in a rather inflexible manner, and one
 #' of the columns needs to be a date, to be specified exactly with the date.col arg.
+#' @param sql.date Default is FALSE. Set to TRUE if the date is the complex character
+#' string that comes directly out of eBIRD SQL database, and will force into suitable
+#' format. Otherwise takes date as is.
 #' @param date.col The name of the date column to use for querying downstream. Likely
 #' that some uses of KML files wouldn't need a date column. We should revise this
 #' function to be more flexible, and not require a date.
@@ -61,8 +64,8 @@
 #'  #handle.early="2001", handle.late="2016", schema="test",
 #'  #read.wd="~/thinned", write.wd="~/kml", cores=6)
 
-prepKML <- function(include, date.col, coords, early.date, late.date, handle.early,
-  handle.late, schema, read.wd, write.wd, cores)
+prepKML <- function(include, sql.date=FALSE, date.col, coords, early.date, late.date,
+	handle.early, handle.late, schema, read.wd, write.wd, cores)
 {
   registerDoParallel(cores)
   
@@ -100,10 +103,16 @@ prepKML <- function(include, date.col, coords, early.date, late.date, handle.ear
     stop("the eBird records already contain a column titled 'date'")
   }
 
-  #otherwise, convert and append an actual date
+  #if sql date is TRUE, force to a useful format with this hidden fxn
+  else if(sql.date)
+  {
+  	bound$date <- ebirdDate(bound[,date.col])
+  }
+
+  #otherwise, just make a date column as is
   else
   {
-    bound$date <- ebirdDate(bound[,date.col])
+    bound$date <- bound[,date.col]
   }
 
   #if handle.early is set to drop, exclude all dates from before early.date
