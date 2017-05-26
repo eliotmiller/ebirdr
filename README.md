@@ -113,7 +113,9 @@ prepKML(include=c("SAMPLING_EVENT_IDENTIFIER", "COMMON_NAME", "OBSERVATION_DATE"
 ```
 
 #### How do I get it?
-# First ask for permission from Eliot to become a contributor to ebirdr. Then get an authorization token and install like this:
+First ask for permission from Eliot to become a contributor to ebirdr. Then get an authorization token and install like this:
+```r
 library(devtools)
 install_github("eliotmiller/ebirdr", auth_token="yourtokenhere")
 library(ebirdr)
+```
