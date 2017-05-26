@@ -3,10 +3,10 @@
 
 This is currently a private repo. It is an in-development R package for manipulating and analyzing eBird data. We intend to release it for public use after additional development and testing. 
 
-#### What does it do
-ebirdr currently contains a minimal set of functions. These include the ability to filter all but one group record, clean eBird records to only those that match a given set of arguments, spatially thin eBird records in a stratified manner, extract bioclim climate for eBird points, run PCAs over these climate variables, derive multivariate hypervolumes and prep KML files for MODIS queries.
+#### What does it do?
+ebirdr currently contains a minimal set of functions. These include the ability to filter all but one group record, clean eBird records to only those that match a given set of arguments, spatially thin eBird records (stratified spatial sampling), extract climate values for eBird records, run PCAs over variables (e.g., climate), derive multivariate hypervolumes, and prep KML files for MODIS queries.
 
-#### How do I use it
+#### How do I use it?
 Here are a few examples of how to use ebirdr. I took the output of Matt Strimas-Mackey's auk examples, split them into separate species (Golden-winged and Blue-winged Warblers), replaced the spaces in the names columns, and saved as separated csv files. Put those csv files in a folder, and the example begins there. Adjust your directory names accordingly.
 
 ```r
