@@ -43,10 +43,7 @@
 #' data(ex)
 #' dim(ex)
 #'
-#' #create an empty directory and save the ex object into it as "ex.csv"
-#' dir.create("delete")
-#' write.csv(ex, paste(getwd(), "delete", "ex.csv", sep="/"), row.names=FALSE)
-#' #then change your working directory to be this new directory, and run
+#' #run the cleaner function
 #' cleaned <- cleaner(ebird.data=ex, arguments=c("VALID == '1'",
 #' "PROTOCOL_NAME == 'eBird - Stationary Count' |
 #'   PROTOCOL_NAME == 'eBird - Traveling Count' & EFFORT_DISTANCE_KM <= 5 |
