@@ -2,21 +2,23 @@
 % Please edit documentation in R/spThinner.R
 \name{spThinner}
 \alias{spThinner}
-\title{Spatially thin a set of eBird records}
+\title{Spatially thin a data frame of eBird records}
 \usage{
-spThinner(xxx, yyy, lat.col, long.col, xlim = c(NA, NA), ylim = c(NA, NA),
-  nx, ny, jitter = FALSE, size, replace = FALSE, read.wd, write.wd, cores)
+spThinner(ebird.data, xxx, yyy, latitude, longitude, xlim = c(NA, NA),
+  ylim = c(NA, NA), nx, ny, jitter = FALSE, size, replace = FALSE)
 }
 \arguments{
+\item{ebird.data}{Dataframe of eBird records.}
+
 \item{xxx}{Either E-W coordinates, or the word "extent". If extent is desired,
 make sure to specify for both xxx & yyy. Function will not handle mixture gracefully.}
 
 \item{yyy}{Either N-S coordinates, or the word "extent". If extent is desired,
 make sure to specify for both xxx & yyy. Function will not handle mixture gracefully.}
 
-\item{lat.col}{The name of the latitude column in the files.}
+\item{latitude}{The name of the latitude column in the files.}
 
-\item{long.col}{The name of the longitude column in the files.}
+\item{longitude}{The name of the longitude column in the files.}
 
 \item{xlim}{Together xlim and ylim define a bounding box within which lookup occurs.
 I.e. all (xxx, yyy) pairs outside of this box are ignored.}
@@ -33,30 +35,24 @@ I.e. all (xxx, yyy) pairs outside of this box are ignored.}
 \item{size}{Maximum number of points per cell to sample}
 
 \item{replace}{Defaults to FALSE. Set to TRUE to sample with replacement.}
-
-\item{read.wd}{Path to the read directory, where the files to be thinned are found.}
-
-\item{write.wd}{Path to the write directory.}
-
-\item{cores}{How many cores to use for parallel processing.}
 }
 \value{
-Spatially thinned csv files written to the write directory.
+A spatially thinned data frame.
 }
 \description{
-Wrapper to lapply sample.grid.cell over multiple files.
+Single data frame spatial thinning within an R session.
 }
 \details{
-This lapplies sample.grid.cell() to a series of eBird files. The read
-directory should contain only files to be cleaned, will not gracefully handle
-other types of files. Important note--depending on how the arguments are passed
-in, sample.grid.cell creates a grid unique
-to the minimum/maximum lat/long of the input data. So, grids with the same
-parameters will be applied to each file in the read working directory. Unless
-the input files have identical extents, or unless fixed coordinates are
-provided, this means that the actual size and
-spacing of the grid will change between files. Some preliminary tests are in
-order to ensure what works for your data.
+This applies sample.grid.cell() to single eBird data frame.
+}
+\examples{
+data(ex)
+plot(ex$LONGITUDE~ex$LATITUDE, col="blue", pch=20, cex=2)
+thinned <- spThinner(ebird.data=ex, xxx="extent", yyy="extent",
+  latitude="LATITUDE", longitude="LONGITUDE", nx=2, ny=2, size=3)
+points(y=thinned$LONGITUDE, x=thinned$LATITUDE, col="red", pch=20, cex=1)
+#the blue points are the original data, the red points are the accepted points
+#after spatial thinning.
 }
 \references{
 Team eBird.

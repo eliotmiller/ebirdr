@@ -21,9 +21,8 @@
 #' 'seq' here, and would mean ebirdr could be run even if you can't install the parallel
 #' processing software.
 #'
-#' @details Interesting and potentially useful method from Blonder et al. 2014, although
-#' not entirely clear how best to set the bandwidth.arg parameters. Has worked well for
-#' me in practice. 
+#' @details Interesting and seemingly very useful method from Blonder et al. 2014, although
+#' not entirely clear how best to set the bandwidth.arg parameters.
 #'
 #' @return Prints progress to the workspace, but saves nothing there. Results written
 #' as RDS files to the write.wd.
@@ -32,10 +31,8 @@
 #'
 #' @references Blonder, B., C. Lamanna, C. Violle, and B. J. Enquist. 2014.
 #' The n-dimensional hypervolume. Global Ecology and Biogeography 23:595-609.
-#'
-#' @importFrom hypervolume hypervolume estimate_bandwidth
 
-hypervolumes <- function(bandwidth.arg, r.points, species.col, trait.cols, read.wd,
+hypervolumesToFile <- function(bandwidth.arg, r.points, species.col, trait.cols, read.wd,
 	write.wd, cores)
 {
 	registerDoParallel(cores)
@@ -74,7 +71,7 @@ hypervolumes <- function(bandwidth.arg, r.points, species.col, trait.cols, read.
 		{
 			results <- hypervolume::hypervolume(data=temp[,2:dim(temp)[2]],
 				repsperpoint=r.points,
-				bandwidth=estimate_bandwidth(temp[,2:dim(temp)[2]],
+				bandwidth=hypervolume::estimate_bandwidth(temp[,2:dim(temp)[2]],
 				method="cross-validation"))
 		}
 		else if(bandwidth.arg=="silverman")

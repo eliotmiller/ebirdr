@@ -2,52 +2,36 @@
 % Please edit documentation in R/cleaner.R
 \name{cleaner}
 \alias{cleaner}
-\title{Function to clean eBird data files}
+\title{Function to clean a data frame of eBird observations}
 \usage{
-cleaner(arguments, keep, group.id, unique.filter = TRUE, read.wd, write.wd,
-  cores, ...)
+cleaner(ebird.data, arguments, keep, group.id, unique.filter = TRUE, ...)
 }
 \arguments{
+\item{ebird.data}{Dataframe of eBird records.}
+
 \item{arguments}{Character vector of arguments to which the existing eBird records will
-be filtered. Records that match these arguments will be kept. See examples below.}
+be filtered. Records that match these arguments will be kept.
+Essentially this should be interpreted as a series of AND statements. In order to use OR
+statements, add the pipe to one of the comma-separated elements of the vector. See
+examples below.}
 
 \item{keep}{Character vector of column names in the existing eBird records that you
-would like to be passed along/kept in the cleaned files.}
+would like to be passed along/kept in the cleaned files. Specify "keep.all" if you
+simply want to keep all columns.}
 
 \item{group.id}{The name of the group ID column in the existing eBird records. Usually
 (always?) simply 'GROUP.ID'. Required if you would like to remove all but one duplicated
-group checklist. Note that it should be possible to remove the unique.filter argument
-and, if group.id is missing, simply assume unique.filter is FALSE. However, because
-the cleaning function operates through a foreach loop, need to do some fancy coding to
-ensure the group.id argument properly gets "exported into the parallel foreach
-environment". This solution seems to work.}
+group checklist.}
 
 \item{unique.filter}{Whether or not to invoke the uniqueFilter function. Default is
 TRUE, meaning that all but one checklist from shared group checklists will be removed.
 Setting to FALSE means that all (duplicated) group checklists will be kept.}
 
-\item{read.wd}{The path to the read working directory, where the existing eBird records
-are housed. The files should be in csv format, and only files you intend to be cleaned
-should be in the directory. The read.wd cannot contain subdirectories or any
-non-csv file types.}
-
-\item{write.wd}{The path to the write working directory. Cleaned files will be written
-to this directory as csv files. The phrase "_cleaned" is automatically appended to the
-file name, so the original eBird records will not be overwritten even if read and write
-working directories are the same.}
-
-\item{cores}{The number of cores to use for parallel processing. This package currently
-requires your computer to be able to handle at, the bare minimum, installation of the
-various parallel processing packages. A forthcoming feature will allow you to specify
-'seq' here, and would mean ebirdr could be run even if you can't install the parallel
-processing software.}
-
 \item{...}{Additional arguments to be passed to lower level functions. For instance,
 could be used to pass sub.id information to uniqueFilter().}
 }
 \value{
-A list of character vectors of unique SUBNATIONAL1_CODEs that each species
-occurs in.
+A cleaned data frame of eBird records.
 }
 \description{
 Filter eBird records to only those that meet a specified set of criteria.
@@ -55,14 +39,10 @@ Filter eBird records to only those that meet a specified set of criteria.
 \details{
 This function should be fairly flexible. Pass it a set of arguments, and only
 records that meet those requirements will be kept. Tell it which columns you want to
-come along, and only those columns will be kept. Currently, this function writes the
-results to file. It saves into the current R session a list of character vectors,
-where each element in the list refers to a file in the write.wd, and the elements within
-the character vector summarize the unique SUBNATIONAL1_CODEs that are found in each
-cleaned file. Useful for generating absences, e.g. by querying on the resulting list
-with the ebirdSQL::ebirdQuery type set to 'absences'. Room for improvement in terms of
-the output of this function, e.g. would be nice to make it so you can specifiy what you
-want to get saved into the active R session.
+come along, and only those columns will be kept. Use the "keep.all" argument if you
+want to simply keep all columns in the cleaned data frame. If you want to clean a
+number of different eBird data frames with the same set of arguments, consider using
+the multiCleaner function, which saves the results directly to file.
 }
 \examples{
 data(ex)
@@ -72,26 +52,15 @@ dim(ex)
 dir.create("delete")
 write.csv(ex, paste(getwd(), "delete", "ex.csv", sep="/"), row.names=FALSE)
 #then change your working directory to be this new directory, and run
-tempLocs <- cleaner(
-   arguments=c("VALID == '1'", "PROTOCOL_NAME != 'Historical'"),
-  keep=c("LOC_ID", "SUBNATIONAL1_CODE", "LATITUDE", "LONGITUDE", "SUB_ID",
-	"CREATION_DT", "PROTOCOL_NAME", "DURATION_HRS", "ALL_OBS_REPORTED",
-	"OBS_DT", "EFFORT_HRS_ATLEAST", "EFFORT_HRS_ATMOST", "EFFORT_DISTANCE_KM",
-	"EFFORT_DISTANCE_KM_ATLEAST", "EFFORT_DISTANCE_KM_ATMOST", "NUM_OBSERVERS",
-	"SCI_NAME", "HOW_MANY_ATLEAST", "HOW_MANY_ATMOST", "REVIEWED", "VALID"),
-  group.id="GROUP_ID", read.wd=paste(getwd(), "delete", sep="/"),
-   write.wd=paste(getwd(), "delete", sep="/"), cores=1)
+cleaned <- cleaner(ebird.data=ex, arguments=c("VALID == '1'",
+"PROTOCOL_NAME == 'eBird - Stationary Count' |
+  PROTOCOL_NAME == 'eBird - Traveling Count' & EFFORT_DISTANCE_KM <= 5 |
+  PROTOCOL_NAME == 'PriMig - Pri Mig Banding Protocol' |
+  PROTOCOL_NAME == 'eBird - Exhaustive Area Count' & DURATION_HRS < 10"),
+  keep="keep.all", unique.filter=TRUE)
 
-#load the cleaned file in
-ex2 <- read.csv(paste(getwd(), "delete", "ex_cleaned.csv", sep="/"))
-
-#many of the records were culled. data.frame went from 80 rows to 52, and we
-#only kept 21 of 28 columns.
-dim(ex2)
-
-#a list of all unique SUBNATIONAL1_CODEs in the cleaned file was saved into
-#the active R session
-tempLocs
+#many of the records were culled.
+dim(cleaned)
 }
 \references{
 Team eBird.

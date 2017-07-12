@@ -35,7 +35,8 @@
 #' option at some
 #' point. There is a major assumption built into the 'comparisons' list above, which
 #' is that the files in read.wd begin with the species' names, with underscores
-#' between the genus and species.
+#' between the genus and species. There currently is no version of this function that
+#' doesn't write results directly to file.
 #'
 #' @return Nothing to the workspace. Saves PCA results to write.wd, and PCA summaries
 #' to aux.wd.
@@ -44,10 +45,8 @@
 #'
 #' @importFrom dplyr bind_rows
 #' @importFrom data.table data.table
-#' @importFrom bigmemory as.big.matrix
-#' @importFrom bigpca big.PCA
 
-bigPCA <- function(comparisons, read.wd, write.wd, aux.wd, columns,
+bigPCAToFile <- function(comparisons, read.wd, write.wd, aux.wd, columns,
 	scale.center=FALSE, SVD=FALSE, axes)
 {
 	#list all the files in read.wd

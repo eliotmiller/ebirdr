@@ -41,7 +41,8 @@
 #' set of eBird records from csv files into a single KML file. That file can then
 #' be loaded into Google as a Fusion Table, which is then fed into a Google Earth
 #' Engine script written by Matt Strimas-Mackey. This script can match records by
-#' date and location to spatial data, e.g., MODIS reflectances.
+#' date and location to spatial data, e.g., MODIS reflectances. There currently is
+#' no version of this function that doesn't write results directly to file.
 #'
 #' @return Nothing to the workspace. A file titled output.kml is written to the
 #' write.wd.
@@ -64,8 +65,8 @@
 #'  #handle.early="2001", handle.late="2016", schema="test",
 #'  #read.wd="~/thinned", write.wd="~/kml", cores=6)
 
-prepKML <- function(include, sql.date=FALSE, date.col, coords, early.date, late.date,
-	handle.early, handle.late, schema, read.wd, write.wd, cores)
+prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
+  late.date, handle.early, handle.late, schema, read.wd, write.wd, cores)
 {
   registerDoParallel(cores)
   
