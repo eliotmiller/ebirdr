@@ -1,8 +1,8 @@
 Package: ebirdr
 Title: Manipulate eBird data
 Description: In-house R package to manipulate eBird data.
-Version: 0.0.2
-Date: 2017-6-07
+Version: 0.0.3
+Date: 2017-11-27
 Authors@R: c(
   person("Eliot", "Miller", email = "etm45@cornell.edu", role = c("aut", "cre")),
   person("Matthew", "Strimas-Mackey", role = "aut"),

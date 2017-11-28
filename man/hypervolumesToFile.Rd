@@ -4,21 +4,25 @@
 \alias{hypervolumesToFile}
 \title{Identify hypervolumes over multiple files}
 \usage{
-hypervolumesToFile(bandwidth.arg, r.points, species.col, trait.cols, read.wd,
-  write.wd, cores)
+hypervolumesToFile(hv.type, bandwidth.arg, r.points, species.col, trait.cols,
+  read.wd, write.wd, cores, ...)
 }
 \arguments{
+\item{hv.type}{Options are "box", "gaussian", and "svm".}
+
 \item{bandwidth.arg}{Options are either "silverman", "cross-validation", or a
 fixed number, per standard hypervolume calculations. See Blonder et al. 2014 for more
 details, including his FAQ page.}
 
 \item{r.points}{The repsperpoint argument from hypervolume. If missing, will be set to
-NULL and will default to hypervolume's default, 500 * the number of dimensions.}
+NULL and will default to hypervolume's default,
+ceiling((10^(3 + sqrt(ncol(data))))/nrow(data)).}
 
 \item{species.col}{The name of the column identifying the species to which the traits
 belong. Not needed per se, but the function currently takes whatever column the user
 provides here and binds the traits.col to it, ignoring this first column for the
-hypervolume calculations. In other words, provide the name of some column here.}
+hypervolume calculations. In other words, it is expected that you provide the name of
+some column here.}
 
 \item{trait.cols}{A character vector detailing which columns from the eBird files you
 would like to calculate a hypervolume for.}
@@ -27,11 +31,10 @@ would like to calculate a hypervolume for.}
 
 \item{write.wd}{The path to the directory where the hypervolumes will be saved.}
 
-\item{cores}{The number of cores to use for parallel processing. This package currently
-requires your computer to be able to handle at, the bare minimum, installation of the
-various parallel processing packages. A forthcoming feature will allow you to specify
-'seq' here, and would mean ebirdr could be run even if you can't install the parallel
-processing software.}
+\item{cores}{The number of cores to use for parallel processing.}
+
+\item{...}{Can be used to pass things to the hypervolume function, e.g., svm.nu for
+the svm method, quantile.requested for gaussian, etc.}
 }
 \value{
 Prints progress to the workspace, but saves nothing there. Results written

@@ -31,6 +31,13 @@
 
 uniqueFilter <- function(dat, group.id, sub.id)
 {
+	#if all the group.ids are blank then this column may be all NAs. I think this happens
+	#because of fread/fwrite assumptions. if this is the case, just return the original
+	if(dim(dat)[1]==sum(is.na(dat[,group.id])))
+	{
+		return(dat)
+	}
+
 	#convert group.id and, if provided, sub.id to character vectors
 	dat[,group.id] <- as.character(dat[,group.id])
 

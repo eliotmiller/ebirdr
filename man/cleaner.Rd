@@ -16,8 +16,8 @@ statements, add the pipe to one of the comma-separated elements of the vector. S
 examples below.}
 
 \item{keep}{Character vector of column names in the existing eBird records that you
-would like to be passed along/kept in the cleaned files. Specify "keep.all" if you
-simply want to keep all columns.}
+would like to be passed along/kept in the cleaned files. Can be set to 'keep.all' in
+order to keep all columns.}
 
 \item{group.id}{The name of the group ID column in the existing eBird records. Usually
 (always?) simply 'GROUP.ID'. Required if you would like to remove all but one duplicated
@@ -39,8 +39,8 @@ Filter eBird records to only those that meet a specified set of criteria.
 \details{
 This function should be fairly flexible. Pass it a set of arguments, and only
 records that meet those requirements will be kept. Tell it which columns you want to
-come along, and only those columns will be kept. Use the "keep.all" argument if you
-want to simply keep all columns in the cleaned data frame. If you want to clean a
+come along, and only those columns will be kept. Use the names of your data frame to
+keep all columns in the cleaned data frame. If you want to clean a
 number of different eBird data frames with the same set of arguments, consider using
 the multiCleaner function, which saves the results directly to file.
 }
@@ -48,16 +48,13 @@ the multiCleaner function, which saves the results directly to file.
 data(ex)
 dim(ex)
 
-#create an empty directory and save the ex object into it as "ex.csv"
-dir.create("delete")
-write.csv(ex, paste(getwd(), "delete", "ex.csv", sep="/"), row.names=FALSE)
-#then change your working directory to be this new directory, and run
+#run the cleaner function
 cleaned <- cleaner(ebird.data=ex, arguments=c("VALID == '1'",
 "PROTOCOL_NAME == 'eBird - Stationary Count' |
   PROTOCOL_NAME == 'eBird - Traveling Count' & EFFORT_DISTANCE_KM <= 5 |
   PROTOCOL_NAME == 'PriMig - Pri Mig Banding Protocol' |
   PROTOCOL_NAME == 'eBird - Exhaustive Area Count' & DURATION_HRS < 10"),
-  keep="keep.all", unique.filter=TRUE)
+  keep=names(ex), unique.filter=TRUE)
 
 #many of the records were culled.
 dim(cleaned)

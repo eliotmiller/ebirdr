@@ -34,7 +34,8 @@
 #' called 'schemaURL' in the resulting KML file.
 #' @param read.wd Path to the read directory, where the files to be prepped are found.
 #' All files in the directory will be bound together and turned into a single KML.
-#' @param write.wd Path to the write directory.
+#' @param write.wd Path to the write directory. CRITICAL: DO NOT USE THE ~ SYMBOL
+#' IN YOUR WRITE.WD OR THE FUNCTION WILL FAIL WITH A MYSTERIOUS ERROR.
 #' @param cores How many cores to use for parallel processing.
 #'
 #' @details This function is rather inflexible and currently intended to convert a
@@ -42,7 +43,9 @@
 #' be loaded into Google as a Fusion Table, which is then fed into a Google Earth
 #' Engine script written by Matt Strimas-Mackey. This script can match records by
 #' date and location to spatial data, e.g., MODIS reflectances. There currently is
-#' no version of this function that doesn't write results directly to file.
+#' no version of this function that doesn't write results directly to file. For
+#' reasons I do not understand, this function generates a warning at the end that
+#' seems like it can be ignored.
 #'
 #' @return Nothing to the workspace. A file titled output.kml is written to the
 #' write.wd.
@@ -104,7 +107,8 @@ prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
     stop("the eBird records already contain a column titled 'date'")
   }
 
-  #if sql date is TRUE, force to a useful format with this hidden fxn
+  #if sql date is TRUE, force to a useful format with this hidden fxn.
+  #force to character here to make it possible to use substr fxn below
   else if(sql.date)
   {
   	bound$date <- ebirdDate(bound[,date.col])
@@ -130,14 +134,19 @@ prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
     tempM <- substr(bound$date[bound$date < early.date], 6, 7)
     tempD <- substr(bound$date[bound$date < early.date], 9, 10)
 
-    #here's a quick check to ensure that any dates from Feb 29th are shifted
-    #to Feb 28th
-    tempDM <- paste(tempM, tempD, sep="-")
-    tempD[tempDM == "02-29"] <- "28"
+    #if the length of either of those is 0, then there are no dates before
+    #early date, and don't need to do any of the rest here
+    if(length(tempM) > 0)
+    {
+      #here's a quick check to ensure that any dates from Feb 29th from before
+      #early date are shifted to Feb 28th
+      tempDM <- paste(tempM, tempD, sep="-")
+      tempD[tempDM == "02-29"] <- "28"
 
-    #paste these along with the new year and replace the values in bound
-    newDate <- as.Date(paste(handle.early, tempM, tempD, sep="-"))
-    bound$date[bound$date < early.date] <- newDate
+      #paste these along with the new year and replace the values in bound
+      newDate <- as.Date(paste(handle.early, tempM, tempD, sep="-"))
+      bound$date[bound$date < early.date] <- newDate
+    }
   }
 
   #if handle.late is set to drop, exclude all dates from after late.date
@@ -151,15 +160,22 @@ prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
   {
     tempM <- substr(bound$date[bound$date > late.date], 6, 7)
     tempD <- substr(bound$date[bound$date > late.date], 9, 10)
-    tempDM <- paste(tempM, tempD, sep="-")
-    tempD[tempDM == "02-29"] <- "28"
-    newDate <- as.Date(paste(handle.late, tempM, tempD, sep="-"))
-    bound$date[bound$date > late.date] <- newDate
+
+    #if the length of either of those is 0, then there are no dates before
+    #early date, and don't need to do any of the rest here
+    if(length(tempM) > 0)
+    {
+      tempDM <- paste(tempM, tempD, sep="-")
+      tempD[tempDM == "02-29"] <- "28"
+      newDate <- as.Date(paste(handle.late, tempM, tempD, sep="-"))
+      bound$date[bound$date > late.date] <- newDate
+    }
   }
 
   #set coordinates on the bound object
   sp::coordinates(bound) <- coords
   sp::proj4string(bound) <- sp::CRS("+proj=longlat +datum=WGS84")
+
   rgdal::writeOGR(obj=bound,
     dsn=paste(write.wd, "output.kml", sep="/"), layer=schema, driver="KML")
 }

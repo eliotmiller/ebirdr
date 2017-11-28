@@ -18,8 +18,8 @@ It won't be much more work to make this more flexible when we're ready to take t
 step.}
 
 \item{keep}{Character vector of column names in the existing eBird records that you
-would like to be passed along/kept in the cleaned files. Can be set to 'keep.all',
-in which case all columns in the eBird data files will be kept.}
+would like to be passed along/kept in the cleaned files. Specify names(ebird.data),
+(but substitute the actual name of your data frame, see example) to keep all columns.}
 
 \item{longitude}{The name of the column in the eBird data files where the longitude
 data is kept.}

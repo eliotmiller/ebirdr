@@ -5,7 +5,8 @@
 #' @param arguments Character vector of arguments to which the existing eBird records will
 #' be filtered. Records that match these arguments will be kept. See examples below.
 #' @param keep Character vector of column names in the existing eBird records that you
-#' would like to be passed along/kept in the cleaned files.
+#' would like to be passed along/kept in the cleaned files. Can be set to 'keep.all' in
+#' order to keep all columns.
 #' @param group.id The name of the group ID column in the existing eBird records. Usually
 #' (always?) simply 'GROUP.ID'. Required if you would like to remove all but one duplicated
 #' group checklist, i.e. required if unique.filter is set to TRUE.
@@ -56,7 +57,8 @@
 #' data(ex)
 #' dim(ex)
 #'
-#' #create an empty directory and save the ex object into it as "ex.csv"
+#' #revise this so it does not create any new directories. use a temporary directory
+#' #instead. then save the ex object into it as "ex.csv"
 #' dir.create("delete")
 #' write.csv(ex, paste(getwd(), "delete", "ex.csv", sep="/"), row.names=FALSE)
 #' #then change your working directory to be this new directory, and run
@@ -133,6 +135,12 @@ cleanerToFile <- function(arguments, keep, group.id, unique.filter=TRUE,
 		if(dim(temp)[1] < 1)
 		{
 			return(NA)
+		}
+
+		#if keep is set to keep.all, set keep equal to all column names
+		if(keep == "keep.all")
+		{
+			keep <- names(temp)
 		}
 		
 		#subset to the columns of interest only

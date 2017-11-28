@@ -12,8 +12,8 @@
 #' @param write.wd Working directory where the eBird records + environmental data will
 #' be saved to.
 #' @param keep Character vector of column names in the existing eBird records that you
-#' would like to be passed along/kept in the cleaned files. Can be set to 'keep.all',
-#' in which case all columns in the eBird data files will be kept.
+#' would like to be passed along/kept in the cleaned files. Can be set to 'keep.all' in
+#' order to keep all columns.
 #' @param longitude The name of the column in the eBird data files where the longitude
 #' data is kept.
 #' @param latitude The name of the column in the eBird data files where the latitude
@@ -57,15 +57,15 @@ extractEnvToFile <- function(env.wd, ebird.wd, write.wd, keep, longitude,
 		#read in the presences for species i
 		records <- as.data.frame(fread(paste(ebird.wd, allFiles[i], sep="/")))
 		
-		#if keep was set to 'keep.all', set keep to the col names of the file
-		if(keep=="keep.all")
+		#pull the environmental data for the records
+		env <- raster::extract(x=envData, y=records[,c(longitude, latitude)])
+	
+		#if keep is set to keep.all, set keep equal to all column names
+		if(keep == "keep.all")
 		{
 			keep <- names(records)
 		}
 
-		#pull the environmental data for the records
-		env <- raster::extract(x=envData, y=records[,c(longitude, latitude)])
-		
 		#subset records to just the columns you want to keep. could probably get rid
 		#or this step and speed the function up considerably. have it in here in case
 		#people get far into an analysis and are sick of how large their files are,
@@ -92,7 +92,7 @@ extractEnvToFile <- function(env.wd, ebird.wd, write.wd, keep, longitude,
 		dim(toSave)[1]
 	}
 	
-	#going to make a big assumption here that the first two words of each file are the
+	#going to make an assumption here that the first two words of each file are the
 	#genus, species of the files in question, and that there's an underscore between
 	splitUp <- strsplit(allFiles, "_")
 

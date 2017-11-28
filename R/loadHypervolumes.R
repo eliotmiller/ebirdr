@@ -19,6 +19,12 @@
 
 loadHypervolumes <- function(read.wd, to.load)
 {
+	#because hypervolume is just a suggests, use this to ensure people have it installed
+ 	if(!requireNamespace("hypervolume", quietly = TRUE))
+ 	{
+ 		stop("The hypervolume package is needed for this. Install it.", call. = FALSE)
+ 	}
+
 	#list all the files in read.wd
 	allFiles <- list.files(path=read.wd)
 

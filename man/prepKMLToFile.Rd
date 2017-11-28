@@ -50,7 +50,8 @@ called 'schemaURL' in the resulting KML file.}
 \item{read.wd}{Path to the read directory, where the files to be prepped are found.
 All files in the directory will be bound together and turned into a single KML.}
 
-\item{write.wd}{Path to the write directory.}
+\item{write.wd}{Path to the write directory. CRITICAL: DO NOT USE THE ~ SYMBOL
+IN YOUR WRITE.WD OR THE FUNCTION WILL FAIL WITH A MYSTERIOUS ERROR.}
 
 \item{cores}{How many cores to use for parallel processing.}
 }
@@ -67,7 +68,9 @@ set of eBird records from csv files into a single KML file. That file can then
 be loaded into Google as a Fusion Table, which is then fed into a Google Earth
 Engine script written by Matt Strimas-Mackey. This script can match records by
 date and location to spatial data, e.g., MODIS reflectances. There currently is
-no version of this function that doesn't write results directly to file.
+no version of this function that doesn't write results directly to file. For
+reasons I do not understand, this function generates a warning at the end that
+seems like it can be ignored.
 }
 \examples{
 #NOT RUN. this will prep a series of CSV files for querying with the MODIS/MCD43A4
