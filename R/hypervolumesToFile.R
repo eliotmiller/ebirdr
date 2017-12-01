@@ -2,6 +2,9 @@
 #'
 #' Given a set of eBird files and specified traits, identify hypervolumes and save to disk.
 #'
+#' @param files Character vector specifying which files from the read.wd to process.
+#' If missing, will assume all files in read.wd should be included.
+#' Full file names (without path) are required.
 #' @param hv.type Options are "box", "gaussian", and "svm". 
 #' @param bandwidth.arg Options are either "silverman", "cross-validation", or a
 #' fixed number, per standard hypervolume calculations. See Blonder et al. 2014 for more
@@ -33,8 +36,8 @@
 #' @references Blonder, B., C. Lamanna, C. Violle, and B. J. Enquist. 2014.
 #' The n-dimensional hypervolume. Global Ecology and Biogeography 23:595-609.
 
-hypervolumesToFile <- function(hv.type, bandwidth.arg, r.points, species.col, trait.cols,
-	read.wd, write.wd, cores, ...)
+hypervolumesToFile <- function(files, hv.type, bandwidth.arg, r.points, species.col,
+	trait.cols, read.wd, write.wd, cores, ...)
 {
  	#because hypervolume is just a suggests, use this to ensure people have it installed
  	if(!requireNamespace("hypervolume", quietly = TRUE))
@@ -50,8 +53,16 @@ hypervolumesToFile <- function(hv.type, bandwidth.arg, r.points, species.col, tr
 
 	registerDoParallel(cores)
 
-	#create a character vector listing all the files in the read.wd
-	allFiles <- list.files(path=read.wd)
+	#if missing files, create a character vector listing all the files in the read.wd
+	if(missing(files))
+	{
+		allFiles <- list.files(path=read.wd)
+	}
+
+	else
+	{
+		allFiles <- files
+	}
 
 	#prep the outfile names
 	outFiles <- strsplit(allFiles, "_")

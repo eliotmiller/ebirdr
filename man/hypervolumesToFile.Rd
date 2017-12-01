@@ -4,10 +4,14 @@
 \alias{hypervolumesToFile}
 \title{Identify hypervolumes over multiple files}
 \usage{
-hypervolumesToFile(hv.type, bandwidth.arg, r.points, species.col, trait.cols,
-  read.wd, write.wd, cores, ...)
+hypervolumesToFile(files, hv.type, bandwidth.arg, r.points, species.col,
+  trait.cols, read.wd, write.wd, cores, ...)
 }
 \arguments{
+\item{files}{Character vector specifying which files from the read.wd to process.
+If missing, will assume all files in read.wd should be included.
+Full file names (without path) are required.}
+
 \item{hv.type}{Options are "box", "gaussian", and "svm".}
 
 \item{bandwidth.arg}{Options are either "silverman", "cross-validation", or a

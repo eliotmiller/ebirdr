@@ -4,10 +4,15 @@
 \alias{prepKMLToFile}
 \title{Convert eBird records to KML}
 \usage{
-prepKMLToFile(include, sql.date = FALSE, date.col, coords, early.date,
-  late.date, handle.early, handle.late, schema, read.wd, write.wd, cores)
+prepKMLToFile(files, include, sql.date = FALSE, date.col, coords, early.date,
+  late.date, handle.early, handle.late, schema, read.wd, write.wd, filename,
+  cores)
 }
 \arguments{
+\item{files}{Character vector specifying which files from the read.wd to include
+in the KML output. If missing, will assume all files in read.wd should be included.
+Full file names (without path) are required.}
+
 \item{include}{Character vector of the columns to include in the prepped KML file.
 Ideally, these should include a single column or combination of columns that 
 can be used as a unique identifier to match KML records back to csv records later.
@@ -52,6 +57,9 @@ All files in the directory will be bound together and turned into a single KML.}
 
 \item{write.wd}{Path to the write directory. CRITICAL: DO NOT USE THE ~ SYMBOL
 IN YOUR WRITE.WD OR THE FUNCTION WILL FAIL WITH A MYSTERIOUS ERROR.}
+
+\item{filename}{Desired name for the output kml file. The file appendix is not
+needed.}
 
 \item{cores}{How many cores to use for parallel processing.}
 }

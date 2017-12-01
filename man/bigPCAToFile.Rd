@@ -11,14 +11,15 @@ bigPCAToFile(comparisons, read.wd, write.wd, aux.wd, columns,
 \item{comparisons}{List of character vectors. Each character vector lists the
 species that will be combined before the PCA is run. The name of the character
 vector (i.e. the name of the elements of the list), are used to save out summaries
-of the PCA, e.g. percent variance explained by each axis.}
+of the PCA, e.g. percent variance explained by each axis. Probably more complicated
+than it needs to be, see examples.}
 
-\item{read.wd}{Working directory where the eBird records with environmental data are
+\item{read.wd}{Path to directory where the eBird records with environmental data are
 stored.}
 
-\item{write.wd}{Working directory where PCA results will be saved.}
+\item{write.wd}{Path to directory where PCA results will be saved.}
 
-\item{aux.wd}{Working directory where the summarized PCA results will be saved.}
+\item{aux.wd}{Path to directory where the summarized PCA results will be saved.}
 
 \item{columns}{Character vector of column names in the existing eBird records that
 you will run the PCA over.}
@@ -39,8 +40,9 @@ potentially seems odd to me for later hypervolume calculations.}
 \item{axes}{How many axes from the PCA to retain and return.}
 }
 \value{
-Nothing to the workspace. Saves PCA results to write.wd, and PCA summaries
-to aux.wd.
+Nothing to the workspace. For each species in 'comparisons', this function
+saves a csv with the scores of all observations for that species into write.wd,
+and a summary table with the proportion of variance explained, etc., into aux.wd.
 }
 \description{
 Combine a set of large eBird files and run a PCA over a specified set of columns.
@@ -58,4 +60,11 @@ point. There is a major assumption built into the 'comparisons' list above, whic
 is that the files in read.wd begin with the species' names, with underscores
 between the genus and species. There currently is no version of this function that
 doesn't write results directly to file.
+}
+\examples{
+#define the comparisons you'll run it over
+#temp <- strsplit(list.files(), "_")
+#woodpeckers <- paste(lapply(temp, "[", 1), lapply(temp, "[", 2), sep="_")
+#woodpeckers <- list(woodpeckers)
+#names(woodpeckers) <- "woodpeckers"
 }

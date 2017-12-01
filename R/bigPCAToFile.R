@@ -5,11 +5,12 @@
 #' @param comparisons List of character vectors. Each character vector lists the
 #' species that will be combined before the PCA is run. The name of the character
 #' vector (i.e. the name of the elements of the list), are used to save out summaries
-#' of the PCA, e.g. percent variance explained by each axis.
-#' @param read.wd Working directory where the eBird records with environmental data are
+#' of the PCA, e.g. percent variance explained by each axis. Probably more complicated
+#' than it needs to be, see examples.
+#' @param read.wd Path to directory where the eBird records with environmental data are
 #' stored.
-#' @param write.wd Working directory where PCA results will be saved.
-#' @param aux.wd Working directory where the summarized PCA results will be saved.
+#' @param write.wd Path to directory where PCA results will be saved.
+#' @param aux.wd Path to directory where the summarized PCA results will be saved.
 #' @param columns Character vector of column names in the existing eBird records that
 #' you will run the PCA over.
 #' @param scale.center Default is FALSE, i.e. a covariance matrix PCA will be run. To
@@ -38,17 +39,31 @@
 #' between the genus and species. There currently is no version of this function that
 #' doesn't write results directly to file.
 #'
-#' @return Nothing to the workspace. Saves PCA results to write.wd, and PCA summaries
-#' to aux.wd.
+#' @return Nothing to the workspace. For each species in 'comparisons', this function
+#' saves a csv with the scores of all observations for that species into write.wd,
+#' and a summary table with the proportion of variance explained, etc., into aux.wd.
 #'
 #' @export
 #'
 #' @importFrom dplyr bind_rows
 #' @importFrom data.table data.table
+#'
+#' @examples
+#' #define the comparisons you'll run it over
+#' #temp <- strsplit(list.files(), "_")
+#' #woodpeckers <- paste(lapply(temp, "[", 1), lapply(temp, "[", 2), sep="_")
+#' #woodpeckers <- list(woodpeckers)
+#' #names(woodpeckers) <- "woodpeckers"
 
 bigPCAToFile <- function(comparisons, read.wd, write.wd, aux.wd, columns,
 	scale.center=FALSE, SVD=FALSE, axes)
 {
+ 	#because bigpca is just a suggests, use this to ensure people have it installed
+ 	if(!requireNamespace("bigpca", quietly = TRUE))
+ 	{
+ 		stop("The bigpca package is needed for this. Install it.", call. = FALSE)
+ 	}
+
 	#list all the files in read.wd
 	allFiles <- list.files(path=read.wd)
 

@@ -2,6 +2,9 @@
 #'
 #' Prep multiple eBird files into a single KML file.
 #'
+#' @param files Character vector specifying which files from the read.wd to include
+#' in the KML output. If missing, will assume all files in read.wd should be included.
+#' Full file names (without path) are required.
 #' @param include Character vector of the columns to include in the prepped KML file.
 #' Ideally, these should include a single column or combination of columns that 
 #' can be used as a unique identifier to match KML records back to csv records later.
@@ -36,6 +39,8 @@
 #' All files in the directory will be bound together and turned into a single KML.
 #' @param write.wd Path to the write directory. CRITICAL: DO NOT USE THE ~ SYMBOL
 #' IN YOUR WRITE.WD OR THE FUNCTION WILL FAIL WITH A MYSTERIOUS ERROR.
+#' @param filename Desired name for the output kml file. The file appendix is not
+#' needed.
 #' @param cores How many cores to use for parallel processing.
 #'
 #' @details This function is rather inflexible and currently intended to convert a
@@ -68,8 +73,9 @@
 #'  #handle.early="2001", handle.late="2016", schema="test",
 #'  #read.wd="~/thinned", write.wd="~/kml", cores=6)
 
-prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
-  late.date, handle.early, handle.late, schema, read.wd, write.wd, cores)
+prepKMLToFile <- function(files, include, sql.date=FALSE, date.col, coords,
+  early.date, late.date, handle.early, handle.late, schema, read.wd, write.wd,
+  filename, cores)
 {
   registerDoParallel(cores)
   
@@ -83,8 +89,16 @@ prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
     stop("write directory must be supplied")
   }
 
-  #create a character vector listing all the files in the read.wd
-  allFiles <- list.files(path=read.wd)
+  #if missing files, create a character vector listing all the files in the read.wd
+  if(missing(files))
+  {
+    allFiles <- list.files(path=read.wd)
+  }
+  
+  else
+  {
+    allFiles <- files
+  }
 
   #go into a foreach loop where it loads the files, cuts them down to the
   #include columns, then rbinds them all together, and converts to a KML
@@ -176,6 +190,8 @@ prepKMLToFile <- function(include, sql.date=FALSE, date.col, coords, early.date,
   sp::coordinates(bound) <- coords
   sp::proj4string(bound) <- sp::CRS("+proj=longlat +datum=WGS84")
 
+  filename <- paste(filename, "kml", sep=".")
+
   rgdal::writeOGR(obj=bound,
-    dsn=paste(write.wd, "output.kml", sep="/"), layer=schema, driver="KML")
+    dsn=paste(write.wd, filename, sep="/"), layer=schema, driver="KML")
 }
