@@ -3,7 +3,16 @@
 #' Combine MODIS files and split into species-level files.
 #'
 #' @param species.col Character vector specifying the column that contains the species
-#' names. Will be used to split files.
+#' names. Will be used to split files. IMPORTANT: ebirdr generally uses file names as
+#' organizational/naming structure. It's possible that the species names do not match
+#' the file names, for instance if the analysis is using a different taxonomy than
+#' eBird. If this is the case, and if the raw MODIS files contain the OBS_ID, the this
+#' argument can be set to NULL, and a 'obs.table' passed instead. See below.
+#' @param obs.table Data frame with 'OBS_ID' as the first column, and the
+#' 'correct.species' that
+#' observation belongs to as the second column. If this approach is used, then
+#' 'correct.species' must be one of the values in keep. This argument can be missing
+#' if species.col is provided.
 #' @param read.wd Path to the read directory, where the files to be prepped are found.
 #' @param write.wd Path to the write directory.
 #' @param aux.wd Path to directory where the sample size summary file will be saved.
@@ -31,7 +40,8 @@
 #' @references Team eBird.
 #'
 
-processModis <- function(species.col, read.wd, write.wd, aux.wd, keep, drop, cores)
+processModis <- function(species.col, obs.table, read.wd, write.wd, aux.wd,
+	keep, drop, cores)
 {
 	#list all the files in read.wd
 	allFiles <- list.files(path=read.wd)
@@ -41,6 +51,15 @@ processModis <- function(species.col, read.wd, write.wd, aux.wd, keep, drop, cor
 
 	#rbind all the files together, then convert to a data frame
 	bound <- as.data.frame(dplyr::bind_rows(loaded))
+
+	#if species.col is NULL, merge in the obs.table
+	if(is.null(species.col))
+	{
+		bound <- merge(bound, obs.table)
+
+		#define species.col as correct.species
+		species.col <- "correct.species"
+	}
 
 	#drop to columns you want
 	bound <- bound[,keep]

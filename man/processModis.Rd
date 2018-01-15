@@ -4,11 +4,22 @@
 \alias{processModis}
 \title{Process MODIS files from Google Earth Engine}
 \usage{
-processModis(species.col, read.wd, write.wd, aux.wd, keep, drop, cores)
+processModis(species.col, obs.table, read.wd, write.wd, aux.wd, keep, drop,
+  cores)
 }
 \arguments{
 \item{species.col}{Character vector specifying the column that contains the species
-names. Will be used to split files.}
+names. Will be used to split files. IMPORTANT: ebirdr generally uses file names as
+organizational/naming structure. It's possible that the species names do not match
+the file names, for instance if the analysis is using a different taxonomy than
+eBird. If this is the case, and if the raw MODIS files contain the OBS_ID, the this
+argument can be set to NULL, and a 'obs.table' passed instead. See below.}
+
+\item{obs.table}{Data frame with 'OBS_ID' as the first column, and the
+'correct.species' that
+observation belongs to as the second column. If this approach is used, then
+'correct.species' must be one of the values in keep. This argument can be missing
+if species.col is provided.}
 
 \item{read.wd}{Path to the read directory, where the files to be prepped are found.}
 

@@ -13,6 +13,8 @@
 #' @param aux.wd Path to directory where the summarized PCA results will be saved.
 #' @param columns Character vector of column names in the existing eBird records that
 #' you will run the PCA over.
+#' @param log.cols The name of the columns to log transform. Somewhat inflexible.
+#' A constant of 0.01 will be added before taking the natural log.
 #' @param scale.center Default is FALSE, i.e. a covariance matrix PCA will be run. To
 #' run a correlation matrix PCA, set to TRUE. Scaling and centering are accomplished
 #' manually before the PCA is run, which I think might be slow to run for really large
@@ -56,7 +58,7 @@
 #' #names(woodpeckers) <- "woodpeckers"
 
 bigPCAToFile <- function(comparisons, read.wd, write.wd, aux.wd, columns,
-	scale.center=FALSE, SVD=FALSE, axes)
+	log.cols, scale.center=FALSE, SVD=FALSE, axes)
 {
  	#because bigpca is just a suggests, use this to ensure people have it installed
  	if(!requireNamespace("bigpca", quietly = TRUE))
@@ -101,6 +103,18 @@ bigPCAToFile <- function(comparisons, read.wd, write.wd, aux.wd, columns,
 		
 		#rbind all the species' processed files together
 		bound <- dplyr::bind_rows(loaded)
+
+		#if any log.cols are provided, log those columns
+		if(!missing(log.cols))
+		{
+			for(i in 1:length(log.cols))
+			{
+				#you should probably add a check here to confirm the column exists.
+				#note the critical with=FALSE call for use in making a data.table act
+				#like a data.frame. not sure why only needed on second part
+				bound[,log.cols[i]] <- log(bound[,log.cols[i], with=FALSE]+0.01)
+			}
+		}
 
 		#pull the relevant rows out
 		tempMatrix <- as.matrix(bound[,2:dim(bound)[2], with=FALSE])

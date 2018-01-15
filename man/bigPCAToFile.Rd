@@ -4,7 +4,7 @@
 \alias{bigPCAToFile}
 \title{Run a PCA over a set of eBird records}
 \usage{
-bigPCAToFile(comparisons, read.wd, write.wd, aux.wd, columns,
+bigPCAToFile(comparisons, read.wd, write.wd, aux.wd, columns, log.cols,
   scale.center = FALSE, SVD = FALSE, axes)
 }
 \arguments{
@@ -23,6 +23,9 @@ stored.}
 
 \item{columns}{Character vector of column names in the existing eBird records that
 you will run the PCA over.}
+
+\item{log.cols}{The name of the columns to log transform. Somewhat inflexible.
+A constant of 0.01 will be added before taking the natural log.}
 
 \item{scale.center}{Default is FALSE, i.e. a covariance matrix PCA will be run. To
 run a correlation matrix PCA, set to TRUE. Scaling and centering are accomplished
